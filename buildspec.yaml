@@ -1,0 +1,25 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      nodesjs: 14
+    commands:
+     - echo Getting Started
+  pre_build:
+    commands:
+     - echo Installing source NPM dependencies...
+     - npm install 
+     - aws --version
+  build: 
+    commands: 
+     - echo Build Started on `date`
+     - echo first test cases
+     - CI=true npm test
+     - echo Compiling the cases
+     - npm run build
+     - echo Build finished , now moving to s3
+  post_build:
+    commands:
+     - echo Build compilited on `date`
+     - aws s3 sync build s3://codebuild-demo-static-s3 --acl public-read
+
